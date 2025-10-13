@@ -1,0 +1,196 @@
+{% extends 'students_teachers/base.html' %}
+
+{% block title %}الصفحة الرئيسية - نظام إدارة الطلاب والأساتذة{% endblock %}
+
+{% block content %}
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-primary mb-3">
+                <i class="bi bi-mortarboard-fill me-3"></i>
+                مرحباً بك في نظام إدارة المدرس
+            </h1>
+            <p class="lead text-muted">نظام شامل لإدارة الطلاب والأساتذة والمواد الدراسية</p>
+            <p>تمت برمجة هدا النظام من محمد الخيتوني </p>
+            <p>mohamedalkitony23@gmail.com</p>
+            <p>0928718804</p>
+        </div>
+    </div>
+</div>
+
+<!-- إحصائيات عامة -->
+<div class="row mb-5">
+    <div class="col-md-3 mb-4">
+        <div class="stats-card text-center">
+            <div class="stats-number">{{ total_students }}</div>
+            <h5><i class="bi bi-people-fill me-2"></i>إجمالي الطلاب</h5>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="stats-card text-center" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <div class="stats-number">{{ total_teachers }}</div>
+            <h5><i class="bi bi-person-badge-fill me-2"></i>إجمالي الأساتذة</h5>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="stats-card text-center" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <div class="stats-number">{{ total_subjects }}</div>
+            <h5><i class="bi bi-book-fill me-2"></i>إجمالي المواد</h5>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="stats-card text-center" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+            <div class="stats-number">{{ total_grades }}</div>
+            <h5><i class="bi bi-clipboard-data-fill me-2"></i>إجمالي الدرجات</h5>
+        </div>
+    </div>
+</div>
+
+<!-- الروابط السريعة -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">الروابط السريعة</h2>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="bi bi-people-fill text-primary" style="font-size: 3rem;"></i>
+                <h5 class="card-title mt-3">إدارة الطلاب</h5>
+                <p class="card-text">عرض وإدارة بيانات الطلاب</p>
+                <a href="{% url 'students_teachers:students_list' %}" class="btn btn-primary">
+                    <i class="bi bi-arrow-left me-2"></i>عرض الطلاب
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="bi bi-person-badge-fill text-success" style="font-size: 3rem;"></i>
+                <h5 class="card-title mt-3">إدارة الأساتذة</h5>
+                <p class="card-text">عرض وإدارة بيانات الأساتذة</p>
+                <a href="{% url 'students_teachers:teachers_list' %}" class="btn btn-success">
+                    <i class="bi bi-arrow-left me-2"></i>عرض الأساتذة
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="bi bi-book-fill text-info" style="font-size: 3rem;"></i>
+                <h5 class="card-title mt-3">إدارة المواد</h5>
+                <p class="card-text">عرض وإدارة المواد الدراسية</p>
+                <a href="{% url 'students_teachers:subjects_list' %}" class="btn btn-info">
+                    <i class="bi bi-arrow-left me-2"></i>عرض المواد
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="bi bi-clipboard-data-fill text-warning" style="font-size: 3rem;"></i>
+                <h5 class="card-title mt-3">إدارة الدرجات</h5>
+                <p class="card-text">عرض وإدارة درجات الطلاب</p>
+                <a href="{% url 'students_teachers:grades_list' %}" class="btn btn-warning">
+                    <i class="bi bi-arrow-left me-2"></i>عرض الدرجات
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- أحدث الطلاب والأساتذة -->
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-people-fill me-2"></i>أحدث الطلاب المسجلين
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if recent_students %}
+                    <div class="list-group list-group-flush">
+                        {% for student in recent_students %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ student.full_name }}</strong>
+                                <br>
+                                <small class="text-muted">{{ student.student_id }} - {{ student.get_grade_display }}</small>
+                            </div>
+                            <a href="{% url 'students_teachers:student_detail' student.id %}" class="btn btn-sm btn-outline-primary">
+                                عرض
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="{% url 'students_teachers:students_list' %}" class="btn btn-primary">
+                            عرض جميع الطلاب
+                        </a>
+                    </div>
+                {% else %}
+                    <p class="text-muted text-center">لا توجد بيانات طلاب</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-person-badge-fill me-2"></i>أحدث الأساتذة
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if recent_teachers %}
+                    <div class="list-group list-group-flush">
+                        {% for teacher in recent_teachers %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ teacher.full_name }}</strong>
+                                <br>
+                                <small class="text-muted">{{ teacher.email }}</small>
+                            </div>
+                            <a href="{% url 'students_teachers:teacher_detail' teacher.id %}" class="btn btn-sm btn-outline-success">
+                                عرض
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="{% url 'students_teachers:teachers_list' %}" class="btn btn-success">
+                            عرض جميع الأساتذة
+                        </a>
+                    </div>
+                {% else %}
+                    <p class="text-muted text-center">لا توجد بيانات أساتذة</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- رابط لوحة التحكم -->
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <div class="card bg-light">
+            <div class="card-body">
+                <h5 class="card-title">لوحة التحكم الإدارية</h5>
+                <p class="card-text">للوصول إلى جميع وظائف الإدارة المتقدمة</p>
+                <a href="/admin/" class="btn btn-dark btn-lg">
+                    <i class="bi bi-gear-fill me-2"></i>دخول لوحة التحكم
+                </a>
+                <br>
+                <small class="text-muted mt-2 d-block">
+                    اسم المستخدم: admin1 | كلمة المرور: admin1234
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

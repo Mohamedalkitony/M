@@ -1,0 +1,76 @@
+{% extends 'students_teachers/base.html' %}
+
+{% block title %}قائمة المواد - نظام إدارة الطلاب والأساتذة{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="display-5 fw-bold text-info mb-4">
+            <i class="bi bi-book-fill me-3"></i>قائمة المواد الدراسية
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+    {% for subject in subjects %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">{{ subject.name }}</h5>
+                <small>{{ subject.code }}</small>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ subject.description|default:"لا يوجد وصف" }}</p>
+                
+                <div class="row text-center">
+                    <div class="col-6">
+                        <div class="border-end">
+                            <h6 class="text-primary">{{ subject.students_count }}</h6>
+                            <small class="text-muted">طالب</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <h6 class="text-success">{{ subject.teachers_count }}</h6>
+                        <small class="text-muted">أستاذ</small>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'students_teachers:subject_detail' subject.id %}" class="btn btn-info btn-sm w-100">
+                    <i class="bi bi-eye me-1"></i>عرض التفاصيل
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="text-center py-5">
+            <i class="bi bi-book text-muted" style="font-size: 4rem;"></i>
+            <h4 class="text-muted mt-3">لا توجد مواد</h4>
+            <p class="text-muted">لم يتم إضافة أي مواد دراسية بعد</p>
+            <a href="/admin/students_teachers/subject/" class="btn btn-info">
+                <i class="bi bi-plus-circle me-1"></i>إضافة مادة جديدة
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if subjects %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h6 class="card-title">إجمالي المواد: {{ subjects|length }}</h6>
+                <p class="card-text">
+                    <a href="/admin/students_teachers/subject/" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-plus-circle me-1"></i>إضافة مادة جديدة
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
