@@ -67,9 +67,6 @@ class Student(models.Model):
         ('7', 'الصف السابع'),
         ('8', 'الصف الثامن'),
         ('9', 'الصف التاسع'),
-        ('10', 'الصف العاشر'),
-        ('11', 'الصف الحادي عشر'),
-        ('12', 'الصف الثاني عشر'),
     ]
     
     student_id = models.CharField(max_length=20, unique=True, verbose_name="رقم الطالب")
