@@ -7,21 +7,20 @@
     <div class="col-12">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'students_teachers:home' %}">الرئيسية</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'students_teachers:students_list' %}">الطلاب</a></li>
-                <li class="breadcrumb-item active">{{ student.full_name }}</li>
+                <li class="breadcrumb-item"><a href="{% url 'students_teachers:home' %}" style="color: #0056b3;">الرئيسية</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'students_teachers:students_list' %}" style="color: #0056b3;">الطلاب</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ student.full_name }}</li>
             </ol>
         </nav>
     </div>
 </div>
 
 <div class="row">
-    <!-- معلومات الطالب الأساسية -->
     <div class="col-md-4 mb-4">
         <div class="card">
-            <div class="card-header bg-primary text-white text-center">
+            <div class="card-header text-white text-center" style="background: linear-gradient(135deg, #0056b3 0%, #3e0b74 100%);">
                 <div class="avatar-circle bg-white text-primary mx-auto mb-3" 
-                     style="width: 80px; height: 80px; border-radius: 50%; font-size: 2rem; font-weight: bold; display: flex; align-items: center; justify-content: center;">
+                    style="width: 80px; height: 80px; border-radius: 50%; font-size: 2rem; font-weight: bold; display: flex; align-items: center; justify-content: center; color: #0056b3 !important;">
                     {{ student.first_name|first }}{{ student.last_name|first }}
                 </div>
                 <h4 class="mb-0">{{ student.full_name }}</h4>
@@ -31,7 +30,7 @@
                 <div class="row mb-3">
                     <div class="col-sm-4"><strong>الصف:</strong></div>
                     <div class="col-sm-8">
-                        <span class="badge bg-info">{{ student.get_grade_display }}</span>
+                        <span class="badge" style="background-color: #0056b3 !important;">{{ student.get_grade_display }}</span>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -50,7 +49,7 @@
                 <div class="row mb-3">
                     <div class="col-sm-4"><strong>البريد الإلكتروني:</strong></div>
                     <div class="col-sm-8">
-                        <a href="mailto:{{ student.email }}">{{ student.email }}</a>
+                        <a href="mailto:{{ student.email }}" style="color: #0056b3;">{{ student.email }}</a>
                     </div>
                 </div>
                 {% endif %}
@@ -58,7 +57,7 @@
                 <div class="row mb-3">
                     <div class="col-sm-4"><strong>الهاتف:</strong></div>
                     <div class="col-sm-8">
-                        <a href="tel:{{ student.phone }}">{{ student.phone }}</a>
+                        <a href="tel:{{ student.phone }}" style="color: #0056b3;">{{ student.phone }}</a>
                     </div>
                 </div>
                 {% endif %}
@@ -70,11 +69,9 @@
         </div>
     </div>
 
-    <!-- معلومات ولي الأمر والمواد -->
     <div class="col-md-8 mb-4">
-        <!-- معلومات ولي الأمر -->
         <div class="card mb-4">
-            <div class="card-header bg-success text-white">
+            <div class="card-header text-white" style="background: linear-gradient(135deg, #0056b3 0%, #3e0b74 100%);">
                 <h5 class="mb-0">
                     <i class="bi bi-person-fill me-2"></i>معلومات ولي الأمر
                 </h5>
@@ -86,15 +83,14 @@
                     </div>
                     <div class="col-md-6">
                         <strong>هاتف ولي الأمر:</strong> 
-                        <a href="tel:{{ student.parent_phone }}">{{ student.parent_phone }}</a>
+                        <a href="tel:{{ student.parent_phone }}" style="color: #0056b3;">{{ student.parent_phone }}</a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- المواد المسجل بها -->
         <div class="card mb-4">
-            <div class="card-header bg-info text-white">
+            <div class="card-header text-white" style="background: linear-gradient(135deg, #0056b3 0%, #3e0b74 100%);">
                 <h5 class="mb-0">
                     <i class="bi bi-book-fill me-2"></i>المواد المسجل بها
                 </h5>
@@ -104,7 +100,7 @@
                     <div class="row">
                         {% for subject in student.subjects.all %}
                         <div class="col-md-6 mb-2">
-                            <span class="badge bg-light text-dark border p-2">
+                            <span class="badge border p-2" style="background-color: #f8f9fa !important; color: #495057 !important; border-color: #ced4da !important;">
                                 {{ subject.name }} ({{ subject.code }})
                             </span>
                         </div>
@@ -116,13 +112,12 @@
             </div>
         </div>
 
-        <!-- الدرجات -->
         <div class="card">
-            <div class="card-header bg-warning text-dark">
+            <div class="card-header text-white" style="background: linear-gradient(135deg, #0056b3 0%, #3e0b74 100%);">
                 <h5 class="mb-0">
                     <i class="bi bi-clipboard-data-fill me-2"></i>الدرجات
                     {% if avg_grade %}
-                        <span class="badge bg-primary float-end">المعدل: {{ avg_grade|floatformat:1 }}</span>
+                        <span class="badge float-end" style="background-color: #ced4da !important; color: #495057 !important;">المعدل: {{ avg_grade|floatformat:1 }}</span>
                     {% endif %}
                 </h5>
             </div>
@@ -143,17 +138,13 @@
                                 {% for grade in grades %}
                                 <tr>
                                     <td>{{ grade.subject.name }}</td>
-                                    <td>{{ grade.teacher.full_name }}</td>
+                                    <td><a href="{% url 'students_teachers:teacher_detail' grade.teacher.id %}" style="color: #0056b3;">{{ grade.teacher.full_name }}</a></td>
                                     <td>{{ grade.grade }}/{{ grade.max_grade }}</td>
                                     <td>
                                         <div class="progress" style="height: 20px;">
-                                            <div class="progress-bar 
-                                                {% if grade.percentage >= 90 %}bg-success
-                                                {% elif grade.percentage >= 80 %}bg-info
-                                                {% elif grade.percentage >= 70 %}bg-warning
-                                                {% else %}bg-danger{% endif %}" 
+                                            <div class="progress-bar" 
                                                 role="progressbar" 
-                                                style="width: {{ grade.percentage }}%">
+                                                style="width: {{ grade.percentage }}%; background-color: {% if grade.percentage >= 90 %}#0056b3{% elif grade.percentage >= 80 %}#4169e1{% elif grade.percentage >= 70 %}#adb5bd{% else %}#dc3545{% endif %}!important;">
                                                 {{ grade.percentage|floatformat:1 }}%
                                             </div>
                                         </div>
@@ -172,10 +163,9 @@
     </div>
 </div>
 
-<!-- أزرار الإجراءات -->
 <div class="row mt-4">
     <div class="col-12 text-center">
-        <a href="{% url 'students_teachers:students_list' %}" class="btn btn-secondary me-2">
+        <a href="{% url 'students_teachers:students_list' %}" class="btn btn-light border me-2" style="color: #495057; border-color: #ced4da;">
             <i class="bi bi-arrow-right me-2"></i>العودة لقائمة الطلاب
         </a>
         <a href="/admin/students_teachers/student/{{ student.id }}/change/" class="btn btn-primary">
@@ -184,4 +174,3 @@
     </div>
 </div>
 {% endblock %}
-

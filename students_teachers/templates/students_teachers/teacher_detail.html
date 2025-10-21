@@ -1,0 +1,113 @@
+{% extends 'students_teachers/base.html' %}
+
+{% block title %}{{ teacher.full_name }} - تفاصيل الأستاذ{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'students_teachers:home' %}" style="color: #0056b3;">الرئيسية</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'students_teachers:teachers_list' %}" style="color: #0056b3;">الأساتذة</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ teacher.full_name }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header text-white text-center" style="background: linear-gradient(135deg, #0056b3 0%, #3e0b74 100%);">
+                <div class="avatar-circle bg-white text-primary mx-auto mb-3" 
+                    style="width: 80px; height: 80px; border-radius: 50%; font-size: 2rem; font-weight: bold; display: flex; align-items: center; justify-content: center; color: #0056b3 !important;">
+                    <i class="bi bi-person-workspace"></i>
+                </div>
+                <h4 class="mb-0">{{ teacher.full_name }}</h4>
+                <p class="mb-0">{{ teacher.teacher_id }}</p>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>البريد الإلكتروني:</strong> 
+                        <a href="mailto:{{ teacher.email }}" style="color: #0056b3;">{{ teacher.email }}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>الهاتف:</strong> 
+                        <a href="tel:{{ teacher.phone }}" style="color: #0056b3;">{{ teacher.phone|default:"غير متوفر" }}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>تاريخ التعيين:</strong> 
+                        {{ teacher.hire_date|date:"Y/m/d" }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>العنوان:</strong> 
+                        {{ teacher.address|default:"غير محدد" }}
+                    </li>
+                </ul>
+            </div>
+            <div class="card-footer text-center">
+                <a href="/admin/students_teachers/teacher/{{ teacher.id }}/change/" class="btn btn-primary btn-sm">
+                    <i class="bi bi-pencil-fill me-1"></i>تعديل بيانات الأستاذ
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8 mb-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <div class="row">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <div class="p-3 border rounded" style="background-color: #f8f9fa;">
+                            <h3 style="color: #0056b3;" class="fw-bold">{{ students_count }}</h3>
+                            <p class="text-muted mb-0">طالب يدرس لهم</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded" style="background-color: #f8f9fa;">
+                            <h3 style="color: #0056b3;" class="fw-bold">{{ grades_count }}</h3>
+                            <p class="text-muted mb-0">درجة أدخلها</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header text-white" style="background: linear-gradient(135deg, #0056b3 0%, #3e0b74 100%);">
+                <h5 class="mb-0">
+                    <i class="bi bi-book-half me-2"></i>المواد التي يقوم بتدريسها ({{ subjects|length }})
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if subjects %}
+                    <div class="list-group list-group-flush">
+                        {% for subject in subjects %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ subject.name }}</strong>
+                                <span class="badge" style="background-color: #ced4da; color: #495057;">{{ subject.code }}</span>
+                            </div>
+                            <a href="{% url 'students_teachers:subject_detail' subject.id %}" class="btn btn-sm btn-outline-secondary" style="border-color: #ced4da; color: #495057;">
+                                تفاصيل المادة
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted text-center">لم يتم إسناد أي مواد لهذا الأستاذ بعد.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <a href="{% url 'students_teachers:teachers_list' %}" class="btn btn-light border" style="color: #495057; border-color: #ced4da;">
+            <i class="bi bi-arrow-right me-2"></i>العودة لقائمة الأساتذة
+        </a>
+    </div>
+</div>
+{% endblock %}

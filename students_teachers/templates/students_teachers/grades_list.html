@@ -5,13 +5,12 @@
 {% block content %}
 <div class="row mb-4">
     <div class="col-12">
-        <h1 class="display-5 fw-bold text-warning mb-4">
+        <h1 class="display-5 fw-bold" style="color: #0056b3;">
             <i class="bi bi-clipboard-data-fill me-3"></i>قائمة الدرجات
         </h1>
     </div>
 </div>
 
-<!-- شريط البحث والفلترة -->
 <div class="row mb-4">
     <div class="col-12">
         <div class="card">
@@ -34,7 +33,7 @@
                         </select>
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
-                        <button type="submit" class="btn btn-warning w-100">
+                        <button type="submit" class="btn btn-primary w-100">
                             <i class="bi bi-search me-2"></i>بحث
                         </button>
                     </div>
@@ -44,7 +43,6 @@
     </div>
 </div>
 
-<!-- جدول الدرجات -->
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -66,17 +64,17 @@
                                 {% for grade in page_obj %}
                                 <tr>
                                     <td>
-                                        <a href="{% url 'students_teachers:student_detail' grade.student.id %}" class="text-decoration-none">
+                                        <a href="{% url 'students_teachers:student_detail' grade.student.id %}" class="text-decoration-none" style="color: #0056b3;">
                                             {{ grade.student.full_name }}
                                         </a>
                                         <br>
                                         <small class="text-muted">{{ grade.student.student_id }}</small>
                                     </td>
                                     <td>
-                                        <span class="badge bg-info">{{ grade.subject.name }}</span>
+                                        <span class="badge" style="background-color: #0056b3 !important;">{{ grade.subject.name }}</span>
                                     </td>
                                     <td>
-                                        <a href="{% url 'students_teachers:teacher_detail' grade.teacher.id %}" class="text-decoration-none">
+                                        <a href="{% url 'students_teachers:teacher_detail' grade.teacher.id %}" class="text-decoration-none" style="color: #0056b3;">
                                             {{ grade.teacher.full_name }}
                                         </a>
                                     </td>
@@ -85,13 +83,13 @@
                                     </td>
                                     <td>
                                         <div class="progress" style="height: 25px;">
-                                            <div class="progress-bar 
-                                                {% if grade.percentage >= 90 %}bg-success
-                                                {% elif grade.percentage >= 80 %}bg-info
-                                                {% elif grade.percentage >= 70 %}bg-warning
-                                                {% else %}bg-danger{% endif %}" 
+                                            <div class="progress-bar" 
                                                 role="progressbar" 
-                                                style="width: {{ grade.percentage }}%">
+                                                style="width: {{ grade.percentage }}%; background-color: 
+                                                    {% if grade.percentage >= 90 %}#0056b3 
+                                                    {% elif grade.percentage >= 80 %}#4169e1 
+                                                    {% elif grade.percentage >= 70 %}#adb5bd 
+                                                    {% else %}#dc3545{% endif %} !important;">
                                                 {{ grade.percentage|floatformat:1 }}%
                                             </div>
                                         </div>
@@ -103,37 +101,36 @@
                         </table>
                     </div>
 
-                    <!-- التنقل بين الصفحات -->
                     {% if page_obj.has_other_pages %}
                     <nav aria-label="تنقل الصفحات" class="mt-4">
                         <ul class="pagination justify-content-center">
                             {% if page_obj.has_previous %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if subject_filter %}&subject={{ subject_filter }}{% endif %}">
+                                    <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if subject_filter %}&subject={{ subject_filter }}{% endif %}" style="color: #0056b3;">
                                         الأولى
                                     </a>
                                 </li>
                                 <li class="page-item">
-                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if subject_filter %}&subject={{ subject_filter }}{% endif %}">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if subject_filter %}&subject={{ subject_filter }}{% endif %}" style="color: #0056b3;">
                                         السابقة
                                     </a>
                                 </li>
                             {% endif %}
 
                             <li class="page-item active">
-                                <span class="page-link">
+                                <span class="page-link" style="background-color: #0056b3; border-color: #0056b3;">
                                     صفحة {{ page_obj.number }} من {{ page_obj.paginator.num_pages }}
                                 </span>
                             </li>
 
                             {% if page_obj.has_next %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if subject_filter %}&subject={{ subject_filter }}{% endif %}">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if subject_filter %}&subject={{ subject_filter }}{% endif %}" style="color: #0056b3;">
                                         التالية
                                     </a>
                                 </li>
                                 <li class="page-item">
-                                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if subject_filter %}&subject={{ subject_filter }}{% endif %}">
+                                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if subject_filter %}&subject={{ subject_filter }}{% endif %}" style="color: #0056b3;">
                                         الأخيرة
                                     </a>
                                 </li>
@@ -147,7 +144,7 @@
                         <i class="bi bi-clipboard-data text-muted" style="font-size: 4rem;"></i>
                         <h4 class="text-muted mt-3">لا توجد نتائج</h4>
                         <p class="text-muted">لم يتم العثور على درجات مطابقة لمعايير البحث</p>
-                        <a href="{% url 'students_teachers:grades_list' %}" class="btn btn-warning">
+                        <a href="{% url 'students_teachers:grades_list' %}" class="btn btn-primary">
                             عرض جميع الدرجات
                         </a>
                     </div>
@@ -157,14 +154,13 @@
     </div>
 </div>
 
-<!-- معلومات إضافية -->
 <div class="row mt-4">
     <div class="col-12">
-        <div class="card bg-light">
+        <div class="card bg-white border">
             <div class="card-body text-center">
                 <h6 class="card-title">إجمالي الدرجات: {{ page_obj.paginator.count }}</h6>
                 <p class="card-text">
-                    <a href="/admin/students_teachers/grade/" class="btn btn-sm btn-outline-secondary">
+                    <a href="/admin/students_teachers/grade/" class="btn btn-sm btn-outline-primary">
                         <i class="bi bi-plus-circle me-1"></i>إضافة درجة جديدة
                     </a>
                 </p>
@@ -173,4 +169,3 @@
     </div>
 </div>
 {% endblock %}
-

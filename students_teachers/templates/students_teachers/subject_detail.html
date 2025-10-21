@@ -1,0 +1,189 @@
+{% extends 'students_teachers/base.html' %}
+
+{% block title %}{{ subject.name }} - تفاصيل المادة{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'students_teachers:home' %}" style="color: #0056b3;">الرئيسية</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'students_teachers:subjects_list' %}" style="color: #0056b3;">المواد</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ subject.name }}</li>
+            </ol>
+        </nav>
+        
+        <h1 class="display-5 fw-bold" style="color: #0056b3;">
+            <i class="bi bi-book-fill me-3"></i>{{ subject.name }}
+            <span class="badge" style="background-color: #ced4da; color: #495057;">{{ subject.code }}</span>
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header text-white" style="background: linear-gradient(135deg, #0056b3 0%, #3e0b74 100%);">
+                <h5 class="mb-0">
+                    <i class="bi bi-info-circle-fill me-2"></i>معلومات وإحصائيات
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text text-muted">
+                    {{ subject.description|default:"لا يوجد وصف تفصيلي لهذه المادة." }}
+                </p>
+                
+                <hr>
+                
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>إجمالي الطلاب:</strong>
+                        <span class="badge" style="background-color: #0056b3;">{{ students|length }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>إجمالي الأساتذة:</strong>
+                        <span class="badge" style="background-color: #0056b3;">{{ teachers|length }}</span>
+                    </li>
+                    {% if avg_grade is not None %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-light">
+                        <strong>المعدل العام للدرجات:</strong>
+                        <span class="badge" style="background-color: #adb5bd; color: #495057;">
+                            {{ avg_grade|floatformat:1 }}%
+                        </span>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="card-footer text-center">
+                <a href="/admin/students_teachers/subject/{{ subject.id }}/change/" class="btn btn-primary btn-sm">
+                    <i class="bi bi-pencil-fill me-1"></i>تعديل المادة
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8 mb-4">
+        <div class="card mb-4">
+            <div class="card-header text-white" style="background: linear-gradient(135deg, #0056b3 0%, #3e0b74 100%);">
+                <h5 class="mb-0">
+                    <i class="bi bi-person-badge-fill me-2"></i>الأساتذة المسندة إليهم المادة
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if teachers %}
+                    <div class="list-group list-group-flush">
+                        {% for teacher in teachers %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ teacher.full_name }}</strong>
+                                <br>
+                                <small class="text-muted">{{ teacher.email|default:"لا يوجد بريد إلكتروني" }}</small>
+                            </div>
+                            <a href="{% url 'students_teachers:teacher_detail' teacher.id %}" class="btn btn-sm btn-outline-secondary" style="border-color: #ced4da; color: #495057;">
+                                عرض التفاصيل
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted text-center">لا يوجد أساتذة مسندون لهذه المادة حالياً.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header text-white" style="background: linear-gradient(135deg, #0056b3 0%, #3e0b74 100%);">
+                <h5 class="mb-0">
+                    <i class="bi bi-clipboard-data-fill me-2"></i>أحدث 10 درجات
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if grades %}
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th>الطالب</th>
+                                    <th>الدرجة</th>
+                                    <th>النسبة المئوية</th>
+                                    <th>تاريخ الامتحان</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for grade in grades %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'students_teachers:student_detail' grade.student.id %}" style="color: #0056b3;">
+                                            {{ grade.student.full_name }}
+                                        </a>
+                                    </td>
+                                    <td>{{ grade.grade }}/{{ grade.max_grade }}</td>
+                                    <td>
+                                        <div class="progress" style="height: 20px;">
+                                            <div class="progress-bar" 
+                                                role="progressbar" 
+                                                style="width: {{ grade.percentage }}%; background-color: 
+                                                    {% if grade.percentage >= 90 %}#0056b3 
+                                                    {% elif grade.percentage >= 80 %}#4169e1 
+                                                    {% elif grade.percentage >= 70 %}#adb5bd 
+                                                    {% else %}#dc3545{% endif %} !important;">
+                                                {{ grade.percentage|floatformat:1 }}%
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ grade.exam_date|date:"Y/m/d" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% if grades|length == 10 %}
+                    <div class="text-center mt-3">
+                        <a href="{% url 'students_teachers:grades_list' %}?subject={{ subject.id }}" class="btn btn-sm btn-outline-secondary">
+                            عرض جميع الدرجات
+                        </a>
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <p class="text-muted text-center">لا توجد درجات مسجلة لهذه المادة بعد.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header text-white" style="background-color: #0056b3;">
+                <h5 class="mb-0">
+                    <i class="bi bi-people-fill me-2"></i>الطلاب المسجلون ({{ students|length }})
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if students %}
+                    <div class="row">
+                        {% for student in students %}
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="d-flex align-items-center p-2 border rounded">
+                                <i class="bi bi-person-circle me-3" style="font-size: 1.5rem; color: #0056b3;"></i>
+                                <div>
+                                    <strong class="d-block">
+                                        <a href="{% url 'students_teachers:student_detail' student.id %}" style="color: #0056b3;">
+                                            {{ student.full_name }}
+                                        </a>
+                                    </strong>
+                                    <small class="text-muted">الصف: {{ student.get_grade_display }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted text-center">لا يوجد طلاب مسجلون في هذه المادة حالياً.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
